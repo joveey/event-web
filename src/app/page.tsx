@@ -1,29 +1,220 @@
-import Link from 'next/link';
+// src/app/page.tsx
+'use client'; 
 
-export default function Home() {
+import Link from 'next/link';
+import { FiCalendar, FiMapPin } from 'react-icons/fi';
+import { motion } from 'framer-motion';
+import CountdownTimer from '@/components/Countdown';
+import YouTubePlayer from '@/components/YouTubePlayer';
+
+// Komponen untuk seksi "Hero" (bagian atas)
+const HeroSection = () => (
+    <div className="relative flex flex-col items-center justify-center min-h-screen text-white text-center px-4 overflow-hidden">
+      <div className="max-w-4xl mx-auto">
+        <motion.h1 
+          initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, ease: "easeOut" }}
+          className="font-display text-5xl md:text-7xl font-semibold tracking-tight mb-4 bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-400">
+          Tech Conference 2025
+        </motion.h1>
+        <motion.p 
+          initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, ease: "easeOut", delay: 0.2 }}
+          className="text-lg md:text-xl text-gray-300 max-w-2xl mx-auto mb-8">
+          Bergabunglah dengan para inovator, developer, dan pemimpin industri di konferensi teknologi paling ditunggu tahun ini.
+        </motion.p>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, ease: "easeOut", delay: 0.4 }}
+          className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8 mb-10 text-lg text-gray-200">
+          <div className="flex items-center gap-2"><FiCalendar className="text-purple-400" size={20} /><span>12 November 2025</span></div>
+          <div className="flex items-center gap-2"><FiMapPin className="text-purple-400" size={20} /><span>Jakarta Convention Center</span></div>
+        </motion.div>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, ease: "easeOut", delay: 0.6 }}
+          className="mb-12">
+          <CountdownTimer />
+        </motion.div>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease: "easeOut", delay: 0.8 }}
+          whileTap={{ scale: 0.95 }}>
+          <Link 
+            href="/tickets" 
+            className="inline-block bg-purple-600 text-white font-bold py-4 px-10 rounded-full text-lg transition-all duration-300 ease-in-out hover:bg-purple-700 hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/30 focus:outline-none focus:ring-4 focus:ring-purple-800">
+            Dapatkan Tiket Anda Sekarang
+          </Link>
+        </motion.div>
+      </div>
+    </div>
+  );
+
+// Seksi "Why Attend" dengan 3 kartu
+const WhyAttendSection = () => {
+  const reasons = [
+    {
+      number: "No.1",
+      title: "Stay up-to-date on industry trends",
+      description: "Attending our conference can help you stay abreast of the latest trends and best practices.",
+      image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=2940&auto=format&fit=crop"
+    },
+    {
+      number: "No.2",
+      title: "Network with industry professionals",
+      description: "Conferences provide an opportunity to network with other professionals in your field.",
+      image: "https://images.unsplash.com/photo-1556761175-b413da4baf72?q=80&w=2835&auto=format&fit=crop"
+    },
+    {
+      number: "No.3",
+      title: "Learn from experts and thought leaders",
+      description: "Our conferences often feature keynote speakers and panelists who are experts in the field.",
+      image: "https://images.unsplash.com/photo-1587825140708-dfaf72ae4b04?q=80&w=2940&auto=format&fit=crop"
+    }
+  ];
+
   return (
-    <div className="text-center flex flex-col items-center justify-center min-h-[60vh]">
-      <h1 className="text-5xl md:text-6xl font-extrabold leading-tight mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-teal-300 animate-fade-in-down">
-        Tech Conference 2025
-      </h1>
-      <p className="text-xl text-gray-300 mb-8 max-w-2xl">
-        Bergabunglah dengan para inovator dan pemimpin industri di konferensi teknologi terbesar yang akan mengubah masa depan Anda.
-      </p>
-      
-      <div className="bg-gray-800 rounded-lg p-6 max-w-md mx-auto mb-10 shadow-lg border border-gray-700">
-        <div className="space-y-3 text-left">
-          <p className="text-lg flex items-center"><span className="font-semibold text-blue-400 w-24">🗓️ Tanggal</span>: 25 Agustus 2025</p>
-          <p className="text-lg flex items-center"><span className="font-semibold text-blue-400 w-24">📍 Lokasi</span>: Jakarta Convention Center</p>
-          <p className="text-lg flex items-center"><span className="font-semibold text-blue-400 w-24">⏰ Waktu</span>: 09:00 - 17:00 WIB</p>
+    <motion.section 
+      className="py-20 px-4"
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, amount: 0.2 }}
+      transition={{ staggerChildren: 0.2 }}
+    >
+      <div className="container mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {reasons.map((reason, index) => (
+            <motion.div 
+              key={index}
+              className="bg-white/5 backdrop-blur-md rounded-xl border border-white/10 overflow-hidden"
+              variants={{
+                hidden: { opacity: 0, y: 50 },
+                visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: 'easeOut' } }
+              }}
+            >
+              <div className="p-6">
+                <h3 className="font-display text-3xl font-semibold text-purple-400 mb-2">{reason.number}</h3>
+                <h4 className="font-display text-xl font-semibold text-white h-20">{reason.title}</h4>
+              </div>
+              <img src={reason.image} alt={reason.title} className="w-full h-40 object-cover" />
+              <div className="p-6">
+                <p className="text-gray-400">{reason.description}</p>
+              </div>
+            </motion.div>
+          ))}
         </div>
       </div>
+    </motion.section>
+  );
+};
 
-      <Link 
-        href="/tickets" 
-        className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full text-lg transition-transform transform hover:scale-105 shadow-xl focus:outline-none focus:ring-4 focus:ring-blue-800"
-      >
-        Dapatkan Tiket Anda!
-      </Link>
+// Seksi 'Tentang Event' dengan layout 2 kolom
+const AboutSection = () => (
+  <section className="py-20 px-4">
+    <motion.div 
+      className="container mx-auto bg-white/5 backdrop-blur-md p-8 md:p-12 rounded-2xl border border-white/10"
+      initial={{ opacity: 0, y: 50 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.2 }}
+      transition={{ duration: 0.8, ease: 'easeOut' }}
+    >
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 items-center">
+        <motion.div
+          initial={{ opacity: 0, x: -50 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.8, ease: 'easeOut', delay: 0.2 }}
+        >
+          <img
+            src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=2940&auto=format&fit=crop"
+            alt="Tim berkolaborasi dalam sebuah proyek teknologi"
+            className="rounded-lg shadow-lg w-full h-full object-cover"
+            onError={(e) => { e.currentTarget.src = 'https://placehold.co/600x400/1a1a1a/ffffff?text=Event+Photo'; }}
+          />
+        </motion.div>
+        <motion.div
+          initial={{ opacity: 0, x: 50 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.8, ease: 'easeOut', delay: 0.2 }}
+        >
+          <h2 className="font-display text-4xl font-semibold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-400">
+            Discover The Future of Cyber Security
+          </h2>
+          <p className="text-lg text-gray-300 mb-4">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+          </p>
+        </motion.div>
+      </div>
+    </motion.div>
+  </section>
+);
+
+// Seksi Video YouTube
+const VideoSection = () => (
+  <motion.section 
+    className="py-20 px-4"
+    initial={{ opacity: 0, y: 50 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    viewport={{ once: true, amount: 0.2 }}
+    transition={{ duration: 0.8, ease: "easeOut" }}
+  >
+    <div className="container mx-auto text-center max-w-4xl">
+      <h2 className="font-display text-4xl font-semibold mb-8 bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-400">
+        Get Inspired
+      </h2>
+      <div className="bg-white/5 backdrop-blur-md p-2 rounded-xl border border-white/10">
+        <YouTubePlayer videoId="dQw4w9WgXcQ" /> 
+      </div>
     </div>
+  </motion.section>
+);
+
+// Seksi Pembicara Unggulan
+const SpeakersSection = () => {
+    const speakers = [
+      { name: 'Dr. Arini Putri', title: 'AI Specialist, Google', image: 'https://placehold.co/300x300/1a1a1a/ffffff?text=AP' },
+      { name: 'Budi Santoso', title: 'Lead Engineer, Gojek', image: 'https://placehold.co/300x300/1a1a1a/ffffff?text=BS' },
+      { name: 'Citra Lestari', title: 'VP of Product, Tokopedia', image: 'https://placehold.co/300x300/1a1a1a/ffffff?text=CL' },
+    ];
+  
+    return (
+      <motion.section 
+        className="py-20 px-4"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.2 }}
+        transition={{ staggerChildren: 0.2 }}
+      >
+        <div className="container mx-auto text-center">
+          <h2 className="font-display text-4xl font-semibold mb-12 bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-400">Pembicara Unggulan</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {speakers.map((speaker, index) => (
+              <motion.div 
+                key={index}
+                className="bg-white/5 backdrop-blur-md p-6 rounded-xl border border-white/10 text-center"
+                variants={{
+                  hidden: { opacity: 0, scale: 0.9 },
+                  visible: { opacity: 1, scale: 1, transition: { duration: 0.5 } }
+                }}
+              >
+                <img src={speaker.image} alt={speaker.name} className="w-32 h-32 rounded-full mx-auto mb-4 border-4 border-purple-500" />
+                <h3 className="font-display text-xl font-semibold text-white">{speaker.name}</h3>
+                <p className="text-purple-300">{speaker.title}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </motion.section>
+    );
+  };
+
+// Gabungkan semua seksi di komponen utama Halaman
+export default function Home() {
+  return (
+    <>
+      <HeroSection />
+      <WhyAttendSection />
+      <AboutSection />
+      <VideoSection />
+      <SpeakersSection />
+    </>
   );
 }

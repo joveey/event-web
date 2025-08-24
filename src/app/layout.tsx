@@ -1,10 +1,9 @@
+// src/app/layout.tsx
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import "./globals.css";
-
 import Layout from "@/components/Layout";
-
-const inter = Inter({ subsets: ["latin"] });
+// Impor font yang sudah kita definisikan
+import { satoshi, clashDisplay } from "@/lib/fonts";
 
 export const metadata: Metadata = {
   title: "Pendaftaran Event Keren",
@@ -18,9 +17,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>
-        {/* Dengan membungkus 'children' di sini, semua halaman
-            akan secara otomatis memiliki Navbar dan Footer. */}
+      {/* Terapkan variabel font ke body */}
+      <body className={`${satoshi.variable} ${clashDisplay.variable}`}>
         <Layout>
           {children}
         </Layout>
