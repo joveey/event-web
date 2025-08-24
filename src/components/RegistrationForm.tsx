@@ -1,14 +1,9 @@
+// src/components/RegistrationForm.tsx
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { FiUser, FiMail, FiTag } from 'react-icons/fi';
-
-declare global {
-    interface Window {
-        snap: any;
-    }
-}
 
 export default function RegistrationForm() {
     const [fullName, setFullName] = useState('');
@@ -17,63 +12,30 @@ export default function RegistrationForm() {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [response, setResponse] = useState({ type: '', text: '' });
 
-    useEffect(() => {
-        const snapScript = "https://app.sandbox.midtrans.com/snap/snap.js";
-        const clientKey = process.env.NEXT_PUBLIC_MIDTRANS_CLIENT_KEY;
-
-        const script = document.createElement('script');
-        script.src = snapScript;
-        script.setAttribute('data-client-key', clientKey || '');
-        script.async = true;
-
-        document.body.appendChild(script);
-
-        return () => {
-            document.body.removeChild(script);
-        };
-    }, []);
-
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         setIsSubmitting(true);
         setResponse({ type: '', text: '' });
 
         try {
-            const res = await fetch('/api/payment/token', {
+            // Kembali mengirim data ke API pendaftaran asli
+            const res = await fetch('/api/register', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ fullName, email, ticketType }),
             });
 
             const result = await res.json();
-            if (!res.ok) throw new Error(result.error || 'Gagal membuat transaksi.');
+            if (!res.ok) throw new Error(result.message || 'Gagal mendaftar.');
 
-            const { token } = result;
-
-            window.snap.pay(token, {
-                onSuccess: function(result: any){
-                    console.log('Payment Success:', result);
-                    setResponse({ type: 'success', text: 'Pembayaran berhasil! Email konfirmasi akan segera dikirim.' });
-                },
-                onPending: function(result: any){
-                    console.log('Payment Pending:', result);
-                    setResponse({ type: 'info', text: 'Menunggu pembayaran Anda. Silakan selesaikan transaksi.' });
-                },
-                onError: function(result: any){
-                    console.error('Payment Error:', result);
-                    setResponse({ type: 'error', text: 'Pembayaran gagal. Silakan coba lagi.' });
-                },
-                onClose: function(){
-                    console.log('Popup pembayaran ditutup tanpa menyelesaikan transaksi');
-                }
-            });
-
+            setResponse({ type: 'success', text: 'Pendaftaran berhasil! Email konfirmasi akan segera dikirim.' });
+            
+            // Reset form setelah berhasil
             setFullName('');
             setEmail('');
             setTicketType('Event Attendee');
 
-        } catch (error: unknown) { // <-- PERBAIKAN DI SINI
-            // Menangani error dengan aman sesuai aturan ESLint
+        } catch (error: unknown) {
             let errorMessage = 'Gagal memproses permintaan Anda.';
             if (error instanceof Error) {
                 errorMessage = error.message;
@@ -110,8 +72,8 @@ export default function RegistrationForm() {
                     id="ticketType" value={ticketType} onChange={(e) => setTicketType(e.target.value)} required
                     className="relative w-full pl-12 pr-10 py-3 bg-white/10 border border-transparent rounded-md text-white appearance-none focus:ring-2 focus:ring-purple-500 focus:border-transparent focus:bg-white/5 transition"
                   >
-                    <option value="Event Attendee">Event Attendee Pass ($398)</option>
-                    <option value="Solution Provider">Solution Provider Pass ($798)</option>
+                    <option value="Event Attendee">Event Attendee Pass</option>
+                    <option value="Solution Provider">Solution Provider Pass</option>
                   </select>
                   <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-400">
                     <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
@@ -123,14 +85,13 @@ export default function RegistrationForm() {
                     disabled={isSubmitting} 
                     whileTap={{ scale: 0.95 }}
                     className="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-4 rounded-md transition-all disabled:bg-gray-500 flex items-center justify-center">
-                    {isSubmitting ? 'Memproses...' : 'Lanjut ke Pembayaran'}
+                    {isSubmitting ? 'Memproses...' : 'Daftar Sekarang'}
                   </motion.button>
                 </div>
             </form>
             {response.text && (
                 <p className={`mt-6 text-center p-3 rounded-md ${
-                    response.type === 'success' ? 'text-green-400 bg-green-900/50' : 
-                    response.type === 'error' ? 'text-red-400 bg-red-900/50' : 'text-yellow-400 bg-yellow-900/50'
+                    response.type === 'success' ? 'text-green-400 bg-green-900/50' : 'text-red-400 bg-red-900/50'
                 }`}>
                     {response.text}
                 </p>
