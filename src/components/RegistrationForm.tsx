@@ -1,10 +1,9 @@
-// src/components/RegistrationForm.tsx
 'use client';
 
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { FiUser, FiMail, FiTag } from 'react-icons/fi';
 
-// Deklarasi tipe untuk objek 'snap' dari Midtrans
 declare global {
     interface Window {
         snap: any;
@@ -18,7 +17,6 @@ export default function RegistrationForm() {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [response, setResponse] = useState({ type: '', text: '' });
 
-    // Load script Snap.js dari Midtrans saat komponen dimuat
     useEffect(() => {
         const snapScript = "https://app.sandbox.midtrans.com/snap/snap.js";
         const clientKey = process.env.NEXT_PUBLIC_MIDTRANS_CLIENT_KEY;
@@ -74,43 +72,50 @@ export default function RegistrationForm() {
             setEmail('');
             setTicketType('Event Attendee');
 
-        } catch (error: any) {
-            setResponse({ type: 'error', text: error.message });
+        } catch (error: unknown) { // <-- PERBAIKAN DI SINI
+            // Menangani error dengan aman sesuai aturan ESLint
+            let errorMessage = 'Gagal memproses permintaan Anda.';
+            if (error instanceof Error) {
+                errorMessage = error.message;
+            }
+            setResponse({ type: 'error', text: errorMessage });
         } finally {
             setIsSubmitting(false);
         }
     };
 
     return (
-        // --- PERUBAHAN DESAIN DI SINI ---
         <div className="bg-white/5 backdrop-blur-md p-8 rounded-xl border border-white/10 w-full max-w-lg mx-auto">
             <h2 className="font-display text-2xl font-semibold mb-6 text-center text-white">Formulir Pendaftaran</h2>
             <form onSubmit={handleSubmit} className="space-y-6">
-                <div>
-                  <label htmlFor="fullName" className="block text-sm font-medium text-gray-300 mb-2">Nama Lengkap</label>
+                <div className="relative">
+                  <FiUser className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
                   <input
                     type="text" id="fullName" value={fullName} onChange={(e) => setFullName(e.target.value)} required
-                    className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-md text-white focus:ring-purple-500 focus:border-purple-500 transition"
+                    className="w-full pl-12 pr-4 py-3 bg-white/10 border border-transparent rounded-md text-white placeholder-gray-400 focus:ring-2 focus:ring-purple-500 focus:border-transparent focus:bg-white/5 transition"
                     placeholder="Nama lengkap Anda"
                   />
                 </div>
-                <div>
-                  <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-2">Email Kontak</label>
+                <div className="relative">
+                  <FiMail className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
                   <input
                     type="email" id="email" value={email} onChange={(e) => setEmail(e.target.value)} required
-                    className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-md text-white focus:ring-purple-500 focus:border-purple-500 transition"
+                    className="w-full pl-12 pr-4 py-3 bg-white/10 border border-transparent rounded-md text-white placeholder-gray-400 focus:ring-2 focus:ring-purple-500 focus:border-transparent focus:bg-white/5 transition"
                     placeholder="email.anda@example.com"
                   />
                 </div>
-                <div>
-                  <label htmlFor="ticketType" className="block text-sm font-medium text-gray-300 mb-2">Tipe Tiket</label>
+                <div className="relative">
+                  <FiTag className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 z-10" />
                   <select
                     id="ticketType" value={ticketType} onChange={(e) => setTicketType(e.target.value)} required
-                    className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-md text-white focus:ring-purple-500 focus:border-purple-500 transition"
+                    className="relative w-full pl-12 pr-10 py-3 bg-white/10 border border-transparent rounded-md text-white appearance-none focus:ring-2 focus:ring-purple-500 focus:border-transparent focus:bg-white/5 transition"
                   >
                     <option value="Event Attendee">Event Attendee Pass ($398)</option>
                     <option value="Solution Provider">Solution Provider Pass ($798)</option>
                   </select>
+                  <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-400">
+                    <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                  </div>
                 </div>
                 <div>
                   <motion.button 
