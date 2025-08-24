@@ -1,6 +1,10 @@
+// src/components/SponsorshipForm.tsx
 'use client';
 
 import { useState } from 'react';
+import { motion } from 'framer-motion';
+// --- PERBAIKAN DI SINI ---
+import { FiBriefcase, FiMail, FiMessageSquare } from 'react-icons/fi';
 
 export default function SponsorshipForm() {
   const [companyName, setCompanyName] = useState('');
@@ -28,50 +32,53 @@ export default function SponsorshipForm() {
       setCompanyName('');
       setContactEmail('');
       setMessage('');
-    } catch (error: unknown) { // <-- PERBAIKAN DI SINI
-      // Menangani error dengan aman
-      let errorMessage = 'Gagal mengirim pengajuan karena terjadi kesalahan.';
-      if (error instanceof Error) {
-        errorMessage = error.message;
-      }
-      setResponse({ type: 'error', text: errorMessage });
+    } catch (error: any) {
+      setResponse({ type: 'error', text: error.message });
     } finally {
       setIsSubmitting(false);
     }
   };
 
   return (
-    <div className="bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-lg mx-auto border border-gray-700">
-      <h2 className="text-2xl font-bold mb-6 text-center text-white">Formulir Pengajuan Sponsor</h2>
+    <div className="bg-white/5 backdrop-blur-md p-8 rounded-xl border border-white/10 w-full max-w-lg mx-auto">
+      <h2 className="font-display text-2xl font-semibold mb-6 text-center text-white">Formulir Pengajuan Sponsor</h2>
       <form onSubmit={handleSubmit} className="space-y-6">
-        <div>
-          <label htmlFor="companyName" className="block text-sm font-medium text-gray-300 mb-2">Nama Perusahaan</label>
+        {/* Input Nama Perusahaan dengan Ikon */}
+        <div className="relative">
+          {/* --- PERBAIKAN DI SINI --- */}
+          <FiBriefcase className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
           <input
             type="text" id="companyName" value={companyName} onChange={(e) => setCompanyName(e.target.value)} required
-            className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-md text-white focus:ring-blue-500 focus:border-blue-500"
+            className="w-full pl-12 pr-4 py-3 bg-white/10 border border-transparent rounded-md text-white placeholder-gray-400 focus:ring-2 focus:ring-purple-500 focus:border-transparent focus:bg-white/5 transition"
             placeholder="Nama perusahaan Anda"
           />
         </div>
-        <div>
-          <label htmlFor="contactEmail" className="block text-sm font-medium text-gray-300 mb-2">Email Kontak</label>
+        {/* Input Email dengan Ikon */}
+        <div className="relative">
+          <FiMail className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
           <input
             type="email" id="contactEmail" value={contactEmail} onChange={(e) => setContactEmail(e.target.value)} required
-            className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-md text-white focus:ring-blue-500 focus:border-blue-500"
+            className="w-full pl-12 pr-4 py-3 bg-white/10 border border-transparent rounded-md text-white placeholder-gray-400 focus:ring-2 focus:ring-purple-500 focus:border-transparent focus:bg-white/5 transition"
             placeholder="email.anda@perusahaan.com"
           />
         </div>
-        <div>
-          <label htmlFor="message" className="block text-sm font-medium text-gray-300 mb-2">Pesan (Opsional)</label>
+        {/* Textarea Pesan dengan Ikon */}
+        <div className="relative">
+          <FiMessageSquare className="absolute left-4 top-5 text-gray-400" />
           <textarea
             id="message" value={message} onChange={(e) => setMessage(e.target.value)} rows={4}
-            className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-md text-white focus:ring-blue-500 focus:border-blue-500"
+            className="w-full pl-12 pr-4 py-3 bg-white/10 border border-transparent rounded-md text-white placeholder-gray-400 focus:ring-2 focus:ring-purple-500 focus:border-transparent focus:bg-white/5 transition"
             placeholder="Sampaikan pertanyaan atau detail penawaran Anda di sini..."
           ></textarea>
         </div>
         <div>
-          <button type="submit" disabled={isSubmitting} className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-md transition-all disabled:bg-gray-500 flex items-center justify-center">
+          <motion.button 
+            type="submit" 
+            disabled={isSubmitting} 
+            whileTap={{ scale: 0.95 }}
+            className="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-4 rounded-md transition-all disabled:bg-gray-500 flex items-center justify-center">
             {isSubmitting ? 'Mengirim...' : 'Kirim Pengajuan'}
-          </button>
+          </motion.button>
         </div>
       </form>
       {response.text && (
