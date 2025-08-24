@@ -1,5 +1,3 @@
-// Buat file baru 'SponsorshipForm.tsx' di dalam 'src/components/'.
-
 'use client';
 
 import { useState } from 'react';
@@ -30,8 +28,13 @@ export default function SponsorshipForm() {
       setCompanyName('');
       setContactEmail('');
       setMessage('');
-    } catch (error: any) {
-      setResponse({ type: 'error', text: error.message });
+    } catch (error: unknown) { // <-- PERBAIKAN DI SINI
+      // Menangani error dengan aman
+      let errorMessage = 'Gagal mengirim pengajuan karena terjadi kesalahan.';
+      if (error instanceof Error) {
+        errorMessage = error.message;
+      }
+      setResponse({ type: 'error', text: errorMessage });
     } finally {
       setIsSubmitting(false);
     }

@@ -8,20 +8,18 @@ export default function RegistrationForm() {
   const [email, setEmail] = useState('');
   const [ticketType, setTicketType] = useState('Event Attendee');
   
-  // 4. State untuk status loading
+  // State untuk status loading
   const [isSubmitting, setIsSubmitting] = useState(false);
   
-  // State untuk menampilkan pesan sukses atau error (pengganti alert)
+  // State untuk menampilkan pesan sukses atau error
   const [message, setMessage] = useState({ type: '', text: '' });
 
-  // 1. Membuat fungsi handleSubmit
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault(); // Mencegah refresh halaman
-    setIsSubmitting(true);   // Mengaktifkan status loading
-    setMessage({ type: '', text: '' }); // Reset pesan
+    event.preventDefault();
+    setIsSubmitting(true);
+    setMessage({ type: '', text: '' });
 
     try {
-      // 2. Mengirim data ke endpoint /api/register menggunakan fetch
       const response = await fetch('/api/register', {
         method: 'POST',
         headers: {
@@ -36,25 +34,25 @@ export default function RegistrationForm() {
 
       const result = await response.json();
 
-      // 3. Menangani respons dari API
       if (!response.ok) {
-        // Menangani jika API mengembalikan error
         throw new Error(result.message || 'Pendaftaran gagal! Silakan coba lagi.');
       }
 
-      // Menampilkan pesan sukses
       setMessage({ type: 'success', text: `Terima kasih, ${fullName}! Pendaftaran Anda berhasil.` });
       
-      // Mengosongkan form setelah berhasil
       setFullName('');
       setEmail('');
       setTicketType('Event Attendee');
 
-    } catch (error: any) {
-      // Menampilkan pesan error
-      setMessage({ type: 'error', text: error.message });
+    } catch (error: unknown) { // <-- PERBAIKAN DI SINI
+      // Menampilkan pesan error dengan aman
+      let errorMessage = 'Pendaftaran gagal karena terjadi kesalahan.';
+      if (error instanceof Error) {
+        // Jika error adalah instance dari Error, kita bisa akses .message
+        errorMessage = error.message;
+      }
+      setMessage({ type: 'error', text: errorMessage });
     } finally {
-      // Menonaktifkan status loading setelah selesai
       setIsSubmitting(false);
     }
   };
