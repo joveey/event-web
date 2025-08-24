@@ -1,9 +1,7 @@
-// src/components/SponsorshipForm.tsx
 'use client';
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-// --- PERBAIKAN DI SINI ---
 import { FiBriefcase, FiMail, FiMessageSquare } from 'react-icons/fi';
 
 export default function SponsorshipForm() {
@@ -32,8 +30,13 @@ export default function SponsorshipForm() {
       setCompanyName('');
       setContactEmail('');
       setMessage('');
-    } catch (error: any) {
-      setResponse({ type: 'error', text: error.message });
+    } catch (error: unknown) { // <-- PERBAIKAN DI SINI: Menggunakan 'unknown' bukan 'any'
+      // Menangani error dengan aman sesuai aturan ESLint
+      let errorMessage = 'Gagal mengirim pengajuan karena terjadi kesalahan.';
+      if (error instanceof Error) {
+        errorMessage = error.message;
+      }
+      setResponse({ type: 'error', text: errorMessage });
     } finally {
       setIsSubmitting(false);
     }
@@ -45,7 +48,6 @@ export default function SponsorshipForm() {
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Input Nama Perusahaan dengan Ikon */}
         <div className="relative">
-          {/* --- PERBAIKAN DI SINI --- */}
           <FiBriefcase className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
           <input
             type="text" id="companyName" value={companyName} onChange={(e) => setCompanyName(e.target.value)} required
