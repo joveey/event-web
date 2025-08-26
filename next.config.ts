@@ -2,8 +2,20 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // Opsi ini secara eksplisit memberitahu Next.js untuk memproses framer-motion
-  transpilePackages: ['framer-motion'],
+  // Konfigurasi untuk mengizinkan domain gambar eksternal
+  transpilePackages : ['framer-motion'],
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'placehold.co',
+      },
+    ],
+  },
 };
 
 export default nextConfig;

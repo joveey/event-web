@@ -2,6 +2,7 @@
 'use client'; 
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { FiCalendar, FiMapPin } from 'react-icons/fi';
 import { motion } from 'framer-motion';
 import CountdownTimer from '@/components/Countdown';
@@ -93,7 +94,9 @@ const WhyAttendSection = () => {
                 <h3 className="font-display text-3xl font-semibold text-purple-400 mb-2">{reason.number}</h3>
                 <h4 className="font-display text-xl font-semibold text-white h-20">{reason.title}</h4>
               </div>
-              <img src={reason.image} alt={reason.title} className="w-full h-40 object-cover" />
+              <div className="relative w-full h-40">
+                <Image src={reason.image} alt={reason.title} layout="fill" objectFit="cover" />
+              </div>
               <div className="p-6">
                 <p className="text-gray-400">{reason.description}</p>
               </div>
@@ -121,14 +124,16 @@ const AboutSection = () => (
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true, amount: 0.3 }}
           transition={{ duration: 0.8, ease: 'easeOut', delay: 0.2 }}
+          className="relative w-full h-96"
         >
-          <img
+          <Image
             src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=2940&auto=format&fit=crop"
             alt="Tim berkolaborasi dalam sebuah proyek teknologi"
-            className="rounded-lg shadow-lg w-full h-full object-cover"
-            onError={(e) => { e.currentTarget.src = 'https://placehold.co/600x400/1a1a1a/ffffff?text=Event+Photo'; }}
+            layout="fill"
+            className="rounded-lg shadow-lg object-cover"
           />
         </motion.div>
+
         <motion.div
           initial={{ opacity: 0, x: 50 }}
           whileInView={{ opacity: 1, x: 0 }}
@@ -139,7 +144,7 @@ const AboutSection = () => (
             Discover The Future of Cyber Security
           </h2>
           <p className="text-lg text-gray-300 mb-4">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
           </p>
         </motion.div>
       </div>
@@ -170,9 +175,9 @@ const VideoSection = () => (
 // Seksi Pembicara Unggulan
 const SpeakersSection = () => {
     const speakers = [
-      { name: 'Dr. Arini Putri', title: 'AI Specialist, Google', image: 'https://placehold.co/300x300/1a1a1a/ffffff?text=AP' },
-      { name: 'Budi Santoso', title: 'Lead Engineer, Gojek', image: 'https://placehold.co/300x300/1a1a1a/ffffff?text=BS' },
-      { name: 'Citra Lestari', title: 'VP of Product, Tokopedia', image: 'https://placehold.co/300x300/1a1a1a/ffffff?text=CL' },
+      { name: 'Dr. Arini Putri', title: 'AI Specialist, Google', image: 'https://placehold.co/128x128/1a1a1a/ffffff?text=AP' },
+      { name: 'Budi Santoso', title: 'Lead Engineer, Gojek', image: 'https://placehold.co/128x128/1a1a1a/ffffff?text=BS' },
+      { name: 'Citra Lestari', title: 'VP of Product, Tokopedia', image: 'https://placehold.co/128x128/1a1a1a/ffffff?text=CL' },
     ];
   
     return (
@@ -189,13 +194,19 @@ const SpeakersSection = () => {
             {speakers.map((speaker, index) => (
               <motion.div 
                 key={index}
-                className="bg-white/5 backdrop-blur-md p-6 rounded-xl border border-white/10 text-center"
+                className="bg-white/5 backdrop-blur-md p-6 rounded-xl border border-white/10 text-center flex flex-col items-center"
                 variants={{
                   hidden: { opacity: 0, scale: 0.9 },
                   visible: { opacity: 1, scale: 1, transition: { duration: 0.5 } }
                 }}
               >
-                <img src={speaker.image} alt={speaker.name} className="w-32 h-32 rounded-full mx-auto mb-4 border-4 border-purple-500" />
+                <Image 
+                  src={speaker.image} 
+                  alt={speaker.name} 
+                  width={128}
+                  height={128}
+                  className="rounded-full mb-4 border-4 border-purple-500" 
+                />
                 <h3 className="font-display text-xl font-semibold text-white">{speaker.name}</h3>
                 <p className="text-purple-300">{speaker.title}</p>
               </motion.div>
