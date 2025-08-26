@@ -6,7 +6,7 @@ import Layout from "@/components/Layout";
 import { satoshi, clashDisplay } from "@/lib/fonts";
 
 export const metadata: Metadata = {
-  title: "Pendaftaran Event Keren",
+  title: "JAGO EVENT",
   description: "Website pendaftaran untuk event paling keren tahun ini.",
 };
 
